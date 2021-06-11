@@ -11,7 +11,7 @@
 ## 构建过程
 
 1. `root`用户登录，将项目`rpmbuild`文件夹置于`root`家目录
-2. 执行`rpmbuild -ba rpmbuild/SPECS/openssh.spec`
+2. 执行`cd ~ && rpmbuild -ba rpmbuild/SPECS/openssh.spec`
 3. 文件夹`/root/rpmbuild/RPMS/x86_64`下即构建产物
 
 ## 使用说明

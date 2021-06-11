@@ -302,8 +302,8 @@ install -m 755 contrib/redhat/gnome-ssh-askpass.sh $RPM_BUILD_ROOT%{_sysconfdir}
 perl -pi -e "s|$RPM_BUILD_ROOT||g" $RPM_BUILD_ROOT%{_mandir}/man*/*
 
 %clean
-rm -rf $RPM_BUILD_ROOT
 
+# 触发器脚本
 %triggerun server -- ssh-server
 if [ "$1" != 0 -a -r /var/run/sshd.pid ] ; then
 	touch /var/run/sshd.restart
@@ -332,18 +332,45 @@ if [ "$1" != 0 ] ; then
 	fi
 fi
 
+# 安装/卸载时脚本
+# 新版 RPM 安装前脚本
 %pre server
+echo "new rpm before install"
 %{_sbindir}/groupadd -r -g %{sshd_gid} sshd 2>/dev/null || :
 %{_sbindir}/useradd -d /var/empty/sshd -s /bin/false -u %{sshd_uid} \
 	-g sshd -M -r sshd 2>/dev/null || :
+# 备份老版配置文件
+echo "backup old rpm config"
+cp /etc/ssh/sshd_config /tmp/sshd_config.bak
+echo "1./etc/ssh/sshd_config backup done."
+cp /etc/pam.d/sshd /tmp/sshd.bak
+echo "2./etc/pam.d/sshd backup done."
 
+# 新版 RPM 安装后脚本
 %post server
+echo "new rpm after install"
 /sbin/chkconfig --add sshd
+# 备份新版并还原老版配置文件
+echo "backup new config and restore old config"
+cp /etc/ssh/sshd_config /etc/ssh/sshd_config.rpmnew
+cp /etc/pam.d/sshd /etc/pam.d/sshd.rpmnew
+echo "backup new config done"
+mv /tmp/sshd_config.bak /etc/ssh/sshd_config
+mv /tmp/sshd.bak /etc/pam.d/sshd
+sed -i "s/#PermitRootLogin yes/PermitRootLogin yes/g" /etc/ssh/sshd_config
+echo "restore old config done and adjust PermitRootLogin done"
+# 删除密钥对文件
+rm -rf /etc/ssh/ssh_host_*
+echo "remove all ssh_host_* done"
 
+# 老版 RPM 删除前脚本
 %postun server
+echo "new rpm before uninstall"
 /sbin/service sshd condrestart > /dev/null 2>&1 || :
 
+# 老版 RPM 删除后脚本
 %preun server
+echo "new rpm after uninstall"
 if [ "$1" = 0 ]
 then
 	/sbin/service sshd stop > /dev/null 2>&1 || :

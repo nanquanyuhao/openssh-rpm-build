@@ -100,7 +100,7 @@ BuildRequires: perl
 BuildRequires: compat-openssl10-devel
 %else
 BuildRequires: openssl-devel >= 1.0.1
-BuildRequires: openssl-devel < 1.1
+# BuildRequires: openssl-devel < 1.1
 %endif
 BuildRequires: /bin/login
 %if ! %{build6x}

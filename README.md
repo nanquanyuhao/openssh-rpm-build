@@ -21,14 +21,17 @@
 
    ```shell
    [root@localhost x86_64]# ll
-   total 4648
-   -rw-r--r--. 1 root root  614004 Jun 11 17:08 openssh-8.6p1-1.el7.x86_64.rpm
-   -rw-r--r--. 1 root root  632792 Jun 11 17:08 openssh-clients-8.6p1-1.el7.x86_64.rpm
-   -rw-r--r--. 1 root root 3045832 Jun 11 17:08 openssh-debuginfo-8.6p1-1.el7.x86_64.rpm
-   -rw-r--r--. 1 root root  460764 Jun 11 17:08 openssh-server-8.6p1-1.el7.x86_64.rpm
+   total 4852
+   -rw-r--r--. 1 root root  666608 Jun 12 23:31 openssh-8.6p1-1.el7.x86_64.rpm
+   -rw-r--r--. 1 root root   44336 Jun 12 23:31 openssh-askpass-8.6p1-1.el7.x86_64.rpm
+   -rw-r--r--. 1 root root   25568 Jun 12 23:31 openssh-askpass-gnome-8.6p1-1.el7.x86_64.rpm
+   -rw-r--r--. 1 root root  632756 Jun 12 23:31 openssh-clients-8.6p1-1.el7.x86_64.rpm
+   -rw-r--r--. 1 root root 3128004 Jun 12 23:31 openssh-debuginfo-8.6p1-1.el7.x86_64.rpm
+   -rw-r--r--. 1 root root  460944 Jun 12 23:31 openssh-server-8.6p1-1.el7.x86_64.rpm
    ```
 
-   
+   - `openssh-askpass-8.6p1-1.el7.x86_64.rpm`：开启支持桌面访问后追加的产物，没有图形化需要可以不安装
+   - `openssh-askpass-gnome-8.6p1-1.el7.x86_64.rpm`：开启支持桌面访问后追加的产物，没有图形化需要可以不安装
 
 2. 执行更新命令：
 

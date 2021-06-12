@@ -340,30 +340,36 @@ echo "new rpm before install"
 %{_sbindir}/groupadd -r -g %{sshd_gid} sshd 2>/dev/null || :
 %{_sbindir}/useradd -d /var/empty/sshd -s /bin/false -u %{sshd_uid} \
 	-g sshd -M -r sshd 2>/dev/null || :
+
 # 备份老版配置文件
-echo "backup old rpm config starting..."
-cp /etc/ssh/sshd_config /tmp/sshd_config.bak
-echo "/etc/ssh/sshd_config backup done."
-cp /etc/pam.d/sshd /tmp/sshd.bak
-echo "/etc/pam.d/sshd backup done."
+if [ $1 == 2 ]; then
+    echo "backup old rpm config starting..."
+    cp /etc/ssh/sshd_config /tmp/sshd_config.bak
+    echo "/etc/ssh/sshd_config backup done."
+    cp /etc/pam.d/sshd /tmp/sshd.bak
+    echo "/etc/pam.d/sshd backup done."
+fi
 
 # 新版 RPM 安装后脚本
 %post server
 echo "new rpm after install"
 /sbin/chkconfig --add sshd
+
 # 备份新版并还原老版配置文件
-echo "backup new config and restore old config starting..."
-cp /etc/ssh/sshd_config /etc/ssh/sshd_config.rpmnew
-cp /etc/pam.d/sshd /etc/pam.d/sshd.rpmnew
-echo "backup new config done."
-mv /tmp/sshd_config.bak /etc/ssh/sshd_config
-mv /tmp/sshd.bak /etc/pam.d/sshd
-sed -i "s/#PermitRootLogin yes/PermitRootLogin yes/g" /etc/ssh/sshd_config
-echo "restore old config and adjust PermitRootLogin done."
-# 删除密钥对文件
-echo "remove ssh_host_* starting..."
-rm -rf /etc/ssh/ssh_host_*
-echo "remove all ssh_host_* done."
+if [ $1 == 2 ]; then
+    echo "backup new config and restore old config starting..."
+    cp /etc/ssh/sshd_config /etc/ssh/sshd_config.rpmnew
+    cp /etc/pam.d/sshd /etc/pam.d/sshd.rpmnew
+    echo "backup new config done."
+    mv /tmp/sshd_config.bak /etc/ssh/sshd_config
+    mv /tmp/sshd.bak /etc/pam.d/sshd
+    sed -i "s/#PermitRootLogin yes/PermitRootLogin yes/g" /etc/ssh/sshd_config
+    echo "restore old config and adjust PermitRootLogin done."
+    # 删除密钥对文件
+    echo "remove ssh_host_* starting..."
+    rm -rf /etc/ssh/ssh_host_*
+    echo "remove all ssh_host_* done."
+fi
 
 # 老版 RPM 删除前脚本
 %postun server

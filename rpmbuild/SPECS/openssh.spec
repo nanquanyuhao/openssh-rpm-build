@@ -9,10 +9,10 @@
 %global aversion 1.2.4.1
 
 # Do we want to disable building of x11-askpass? (1=yes 0=no)
-%global no_x11_askpass 1
+%global no_x11_askpass 0
 
 # Do we want to disable building of gnome-askpass? (1=yes 0=no)
-%global no_gnome_askpass 1
+%global no_gnome_askpass 0
 
 # Do we want to link against a static libcrypto? (1=yes 0=no)
 %global static_libcrypto 0
@@ -215,6 +215,7 @@ CFLAGS="$RPM_OPT_FLAGS -Os"; export CFLAGS
 	--mandir=%{_mandir} \
 	--with-mantype=man \
 	--disable-strip \
+	--with-xauth=/bin/xauth \
 %if %{scard}
 	--with-smartcard \
 %endif
@@ -340,28 +341,29 @@ echo "new rpm before install"
 %{_sbindir}/useradd -d /var/empty/sshd -s /bin/false -u %{sshd_uid} \
 	-g sshd -M -r sshd 2>/dev/null || :
 # 备份老版配置文件
-echo "backup old rpm config"
+echo "backup old rpm config starting..."
 cp /etc/ssh/sshd_config /tmp/sshd_config.bak
-echo "1./etc/ssh/sshd_config backup done."
+echo "/etc/ssh/sshd_config backup done."
 cp /etc/pam.d/sshd /tmp/sshd.bak
-echo "2./etc/pam.d/sshd backup done."
+echo "/etc/pam.d/sshd backup done."
 
 # 新版 RPM 安装后脚本
 %post server
 echo "new rpm after install"
 /sbin/chkconfig --add sshd
 # 备份新版并还原老版配置文件
-echo "backup new config and restore old config"
+echo "backup new config and restore old config starting..."
 cp /etc/ssh/sshd_config /etc/ssh/sshd_config.rpmnew
 cp /etc/pam.d/sshd /etc/pam.d/sshd.rpmnew
-echo "backup new config done"
+echo "backup new config done."
 mv /tmp/sshd_config.bak /etc/ssh/sshd_config
 mv /tmp/sshd.bak /etc/pam.d/sshd
 sed -i "s/#PermitRootLogin yes/PermitRootLogin yes/g" /etc/ssh/sshd_config
-echo "restore old config done and adjust PermitRootLogin done"
+echo "restore old config and adjust PermitRootLogin done."
 # 删除密钥对文件
+echo "remove ssh_host_* starting..."
 rm -rf /etc/ssh/ssh_host_*
-echo "remove all ssh_host_* done"
+echo "remove all ssh_host_* done."
 
 # 老版 RPM 删除前脚本
 %postun server

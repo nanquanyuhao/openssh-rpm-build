@@ -7,7 +7,7 @@
    - `openssh-8.6p1.tar.gz`
    - `x11-ssh-askpass-1.2.4.1.tar.gz`
 3. 提前具备安装软件：`yum install rpm-build zlib-devel openssl-devel gcc perl-devel pam-devel`
-4. 桌面图形化涉及构建软件：`yum install libX11-devel libXt-devel imake gtk2-devel xauth`
+4. 桌面图形化涉及构建软件：`yum install libX11-devel libXt-devel imake gtk2-devel libedit-devel xauth`
 
 ## 构建过程
 

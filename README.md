@@ -30,9 +30,8 @@
    -rw-r--r--. 1 root root  460944 Jun 12 23:31 openssh-server-8.6p1-1.el7.x86_64.rpm
    ```
 
-   - `openssh-askpass-8.6p1-1.el7.x86_64.rpm`：开启支持桌面访问后追加的产物，没有图形化需要可以不安装
-   - `openssh-askpass-gnome-8.6p1-1.el7.x86_64.rpm`：开启支持桌面访问后追加的产物，没有图形化需要可以不安装
-
+   - `openssh-askpass-8.6p1-1.el7.x86_64.rpm`+`openssh-askpass-gnome-8.6p1-1.el7.x86_64.rpm`：开启支持桌面访问后追加的产物，没有图形化需要可以不安装；即使使用图形化也可无需安装，经测试原版本自带的`askpass`相关支持可以满足要求
+   
 2. 执行更新命令：
 
    ```shell

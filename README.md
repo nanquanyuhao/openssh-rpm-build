@@ -63,7 +63,7 @@
 
 ## 问题
 
-　　若版本过就，例如`CentOS 7.3`，自带`openssl`版本`OpenSSL 1.0.1e-fips`，使用`rpm`更新报如下：
+　　若版本过旧，例如`CentOS 7.3`，自带`openssl`版本`OpenSSL 1.0.1e-fips`，使用`rpm`更新报如下：
 
 ```shell
 [root@localhost x86_64]# rpm -Uvh openssh-*.rpm

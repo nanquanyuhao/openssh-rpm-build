@@ -360,7 +360,7 @@ echo "new rpm after install"
 /sbin/chkconfig --add sshd
 
 # 备份新版并还原老版配置文件
-# 更新逻辑
+# 版本升级逻辑
 if [ $1 == 2 ]; then
     echo "backup new config and restore old config starting..."
     cp /etc/ssh/sshd_config /etc/ssh/sshd_config.rpmnew
@@ -374,13 +374,14 @@ if [ $1 == 2 ]; then
     echo "remove ssh_host_* starting..."
     rm -rf /etc/ssh/ssh_host_*
     echo "remove all ssh_host_* done."
-# 安装逻辑
+# 初次安装逻辑
 elif [ $1 == 1 ]
 then
     echo "adjust config starting..."
     sed -i "s/#Port 22/Port 10022/g" /etc/ssh/sshd_config
     sed -i "s/#UsePAM no/UsePAM yes/g" /etc/ssh/sshd_config
-    sed -i "s/Subsystem       sftp    /usr/libexec/openssh/sftp-server/Subsystem       sftp    /usr/libexec/openssh/sftp-server -u 750/g" /etc/ssh/sshd_config
+    sed -i "s#/usr/libexec/openssh/sftp-server#/usr/libexec/openssh/sftp-server -u 750#g" /etc/ssh/sshd_config
+    echo "adjust config done..."
 # 异常未匹配
 else
     echo "error happened..."
